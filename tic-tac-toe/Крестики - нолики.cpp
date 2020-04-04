@@ -11,15 +11,6 @@ int crossWin = 0;
 int noughtWin = 0;
 int drawCount = 0;
 
-void drawStart()
-{
-	setlocale(LC_ALL, "Russian");
-	cout << " Первый ход - крестик \n Условно, поле выглядит так:"<< endl;
-	cout << " 0 | 1 | 2 \n 3 | 4 | 5 \n 6 | 7 | 8 \n" << endl;
-	cout << "Положение можно задавать значением ячейки" << endl;
-	cout << "Программа определяет количество выигрышных/проигрышных и ничьих окончаний игры для первого хода." << endl;
-}
-
 void printSquare(PlayField::squareState state) //Отрисовка символа
 {
 	if (state == PlayField::csCross) cout << "Х";
@@ -91,16 +82,21 @@ void fieldWalk(TreeNode* node, PlayField field, PlayField::squareState mark) //�
 
 int main()
 {
-	int id;
 	PlayField field;
-	drawStart();
-	cout << "Ваш ход:" << endl;
-	cin >> id;
-	field.fieldState[id] = PlayField::csCross;
-	drawField(field);
-	TreeNode* treeRoot = &TreeNode(field, nullptr);
-	CreateTree(field, treeRoot); //Создаем дерево для сделанного первого хода
-	cout << "Выигрывает крестик: " << crossWin << endl;
-	cout << "Выигрывает нолик: " << noughtWin << endl;
-	cout << "Ничья: " << drawCount << endl;
+	setlocale(LC_ALL, "Russian");
+	cout << "Программа определяет количество выигрышных, проигрышных и ничьих окончаний игры для первого хода." << endl;
+	for (int i = 0; i < 9; i++)
+	{
+		field.fieldState[i] = PlayField::csCross;
+		drawField(field);
+		TreeNode* treeRoot = &TreeNode(field, nullptr);
+		CreateTree(field, treeRoot); //Создаем дерево для сделанного первого хода
+		cout << "Выигрышей: " << crossWin << endl;
+		cout << "Проигрышей: " << noughtWin << endl;
+		cout << "Ничьих: " << drawCount << endl;
+		field.fieldState[i] = PlayField::csEmpty;
+		crossWin = 0;
+		noughtWin = 0;
+		drawCount = 0;
+	}
 }
