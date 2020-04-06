@@ -7,9 +7,27 @@ using namespace std;
 // Немытова Марина РИ-280002
 // Nemytova Marina RI-280002
 
-int crossWin = 0;
-int noughtWin = 0;
-int drawCount = 0;
+struct Result
+{
+	int crossWin = 0;
+	int noughtWin = 0;
+	int drawCount = 0;
+ 
+	Result& operator+=(const Result& ir)
+	{
+		crossWin += ir.crossWin;
+		noughtWin += ir.noughtWin;
+		drawCount += ir.drawCount;
+		return *this;
+	}
+	void reset()
+	{
+		crossWin = 0;
+		noughtWin = 0;
+		drawCount = 0;
+	}
+};
+
 
 void printSquare(PlayField::squareState state) //Отрисовка символа
 {
@@ -35,9 +53,9 @@ void drawField(PlayField field) //Отрисовка поля
 	cout << endl;
 }
 
-void fieldWalk(TreeNode* node, PlayField field, PlayField::squareState mark);
+void fieldWalk(TreeNode* node, PlayField field, PlayField::squareState mark, Result* res);
 
-bool CreateTree(PlayField field, TreeNode* node)
+bool CreateTree(PlayField field, TreeNode* node, Result* res)
 {
 	if (node->isTerminal(*node)) //Если последняя нода, то проверяем как закончилась игра, иначе идем дальше
 	{
@@ -48,23 +66,24 @@ bool CreateTree(PlayField field, TreeNode* node)
 			switch (status)
 			{
 			case PlayField::fsCrossesWin:
-				crossWin++;
+				//crossWin++;
+				++res->crossWin;
 				break;
 			case PlayField::fsNoughtsWin:
-				noughtWin++;
+				++res->noughtWin;
 				break;
 			case PlayField::fsDraw:
-				drawCount++;
+				++res->drawCount;
 				break;
 			}
 			return true;
 		}
 	}
-	if (node->GetLevel(*node) % 2 == 0) fieldWalk(node, field, PlayField::squareState::csCross);
-	else fieldWalk(node, field, PlayField::squareState::csNought);
+	if (node->GetLevel(*node) % 2 == 0) fieldWalk(node, field, PlayField::squareState::csCross, res);
+	else fieldWalk(node, field, PlayField::squareState::csNought, res);
 }
 
-void fieldWalk(TreeNode* node, PlayField field, PlayField::squareState mark) //Проход по полю
+void fieldWalk(TreeNode* node, PlayField field, PlayField::squareState mark, Result* res) //Проход по полю
 {
 	for (int i = 0; i < 9; i++)
 	{
@@ -74,7 +93,7 @@ void fieldWalk(TreeNode* node, PlayField field, PlayField::squareState mark) //�
 			PlayField newField = field.makeMove(PlayField::CellIdx::GetCellIdx(i)); //Делаем ход
 			TreeNode childNode = TreeNode(newField, node); //Создаем потомка
 			node->addChild(node, &childNode); //Добавляем потомка в дерево
-			CreateTree(field, &childNode); //Создаем дерево
+			CreateTree(field, &childNode, res); //Создаем дерево
 		}
 		
 	}
@@ -90,13 +109,13 @@ int main()
 		field.fieldState[i] = PlayField::csCross;
 		drawField(field);
 		TreeNode* treeRoot = &TreeNode(field, nullptr);
-		CreateTree(field, treeRoot); //Создаем дерево для сделанного первого хода
-		cout << "Выигрышей: " << crossWin << endl;
-		cout << "Проигрышей: " << noughtWin << endl;
-		cout << "Ничьих: " << drawCount << endl;
+		Result res;
+		CreateTree(field, treeRoot, &res); //Создаем дерево для сделанного первого хода
+
+		cout << "Выигрышей: " << res.crossWin << endl;
+		cout << "Проигрышей: " << res.noughtWin << endl;
+		cout << "Ничьих: " << res.drawCount << endl;
 		field.fieldState[i] = PlayField::csEmpty;
-		crossWin = 0;
-		noughtWin = 0;
-		drawCount = 0;
+		res.reset();
 	}
 }

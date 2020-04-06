@@ -19,7 +19,7 @@ public:
             column = id % 3;
             return CellIdx(line, column);
          }
-         CellIdx(const int line, const int column) 
+         CellIdx(int line, int column) 
          {
             assert(line > 0 || column > 0 || line <= 2 || column <= 2);
             lineC = line; 
@@ -37,17 +37,17 @@ public:
         int idC;
     };
     squareState fieldState[9]{ csEmpty,csEmpty,csEmpty,csEmpty,csEmpty,csEmpty,csEmpty,csEmpty,csEmpty }; //Состояние поля
-    std::vector<CellIdx*> getEmptyCells(); //Возвращает все пустые позиции клеток
-    PlayField makeMove(const CellIdx square); // Делает ход на поле
+    std::vector<CellIdx*> getEmptyCells() const; //Возвращает все пустые позиции клеток
+    PlayField makeMove(CellIdx square); // Делает ход на поле
     FieldStatus checkFieldStatus(); // Определяет состояние поля
 
 private:
     squareState mark = csCross; //Текущая метка
     squareState operator[](CellIdx square);
     PlayField operator+(CellIdx square);
-    bool hasMoves(); // Проверка наличия ходов
-    bool checkWin(const PlayField::squareState mark, PlayField::squareState* fieldState); // Выполняет проверку выигрыша
-    bool hasHorizontal(const PlayField::squareState mark, PlayField::squareState* fieldState); // Проверка выигрыша в горизонтальной линии
-    bool hasVertical(const PlayField::squareState mark, PlayField::squareState* fieldState); // Проверка выигрыша в вертикальной линии
-    bool hasDiagonal(const PlayField::squareState mark, PlayField::squareState* fieldState); // Проверка выигрыша в диагональной линии
+    bool hasMoves() const; // Проверка наличия ходов
+    bool checkWin(PlayField::squareState mark, PlayField::squareState* fieldState) const; // Выполняет проверку выигрыша
+    bool hasHorizontal(PlayField::squareState mark, PlayField::squareState* fieldState) const; // Проверка выигрыша в горизонтальной линии
+    bool hasVertical(PlayField::squareState mark, PlayField::squareState* fieldState) const; // Проверка выигрыша в вертикальной линии
+    bool hasDiagonal(PlayField::squareState mark, PlayField::squareState* fieldState) const; // Проверка выигрыша в диагональной линии
 };
