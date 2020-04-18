@@ -21,6 +21,7 @@ public:
 
 	void Insert(int value) { Insert(value, rootNode); };
 	TreeNode* Search(int value) const { return Search(value, rootNode); };
+	TreeNode* GetRootNode() const { return rootNode; };
 
 private:
 	TreeNode* rootNode;
