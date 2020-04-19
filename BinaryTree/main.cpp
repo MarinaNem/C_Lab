@@ -5,16 +5,17 @@ using namespace std;
 //Немытова Марина РИ-280002
 //Nemytova Marina RI-280002
 
-TreeNode* CreateMinimalBST(int* arr, BinaryTree* tree, int startIndex, int endIndex)
+TreeNode* CreateMinimalBST(int* arr, int startIndex, int endIndex)
 {
-    if (endIndex < startIndex) return tree->GetRootNode();
     arr += startIndex;
     int middleIndex = (endIndex + startIndex) / 2;
     int middle = *(arr + middleIndex - startIndex);
-    tree->Insert(middle);
     arr -= startIndex;
-    CreateMinimalBST(arr, tree, startIndex, middleIndex - 1);
-    CreateMinimalBST(arr, tree, middleIndex + 1, endIndex);
+    TreeNode* node = new TreeNode(middle);
+    if (endIndex < startIndex) return nullptr;
+    node->SetLeftChild(CreateMinimalBST(arr, startIndex, middleIndex - 1));
+    node->SetRightChild(CreateMinimalBST(arr, middleIndex + 1, endIndex));
+    return node;
 }
 
 int main()
@@ -28,7 +29,9 @@ int main()
     int middleIndex = (endIndex - startIndex) / 2;
     int middle = *(arr + middleIndex);
     BinaryTree* tree = new BinaryTree(middle);
-    TreeNode* root = CreateMinimalBST(startArr,tree, 0, 8);
+    TreeNode* root = tree->GetRootNode();
+    root->SetLeftChild(CreateMinimalBST(startArr, startIndex, middleIndex - 1));
+    root->SetRightChild(CreateMinimalBST(startArr, middleIndex + 1, endIndex));
     BinaryTree Btree = *tree;
     TreeNode* node = Btree.Search(5);
     if (node) cout << "Address "<< node << "  Value " << node->GetValue();
