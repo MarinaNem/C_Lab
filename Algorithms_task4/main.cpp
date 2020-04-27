@@ -10,9 +10,9 @@ using namespace std::chrono;
 constexpr int SmallSize = 100;
 constexpr int BigSize = 10000;
 #define duration(start, end) duration_cast<nanoseconds>(end - start).count()
-#define сlockNow high_resolution_clock::now();
 
-void PrintResult(string method, int index, int time)
+//Nemytova Marina RI-280002
+void PrintResult(string method, int index, double time)
 {
     if (index == -1)
         cout << "Number not found \nAlgorithm execution time: " << time << endl;
@@ -32,9 +32,9 @@ void PrintArray(int arr[], int size)
 
 int main()
 {
-    int arr[BigSize];
-    int sortArr[SmallSize];
-    srand(time(0));
+    int *arr = new int[BigSize];
+    int *sortArr = new int[SmallSize];
+    srand((int)time(0));
     int number;
 
     for (int i = 0; i < BigSize; i++)  // Array[10000] for Search()
@@ -44,10 +44,10 @@ int main()
     cin >> number;
 
     //Search in an unsorted array and measure runtime
-    auto start1 = сlockNow;
+    auto start1 = system_clock::now();
     int index1 = Search(number, arr, BigSize);
-    auto end1 = сlockNow;
-    PrintResult("Search()", index1, duration(start1,end1));
+    auto end1 = system_clock::now();
+    PrintResult("Search()", index1, duration(start1, end1));
 
     for (int i = 0; i < SmallSize; i++)  //Array[100] for QuickSort() and BSearch()
         sortArr[i] = (rand() % 21) - 10;
@@ -64,14 +64,17 @@ int main()
     cin >> number;
 
     //Searching in a sorted array is not recursive and measuring runtime
-    auto start2 = сlockNow;
+    auto start2 = system_clock::now();
     int index2 = BSearchNotRecursive(number, sortArr, 0, SmallSize - 1);
-    auto end2 = сlockNow;
+    auto end2 = system_clock::now();
     PrintResult("BSearchNotRecursive()", index2, duration(start2, end2));
 
     //Searching in a sorted array is recursive and measuring runtime
-    auto start3 = сlockNow;
+    auto start3 = system_clock::now();
     int index3 = BSearchRecursive(number, sortArr, 0, SmallSize - 1);
-    auto end3 = сlockNow;
+    auto end3 = system_clock::now();
     PrintResult("BSearchRecursive()", index3, duration(start3, end3));
+
+    delete[] arr;
+    delete[] sortArr;
 }
