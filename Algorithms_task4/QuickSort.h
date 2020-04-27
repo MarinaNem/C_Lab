@@ -1,13 +1,5 @@
 #pragma once
 #include <stack>
-using namespace std;
-
-void swap(int* a, int* b)
-{
-    int t = *a;
-    *a = *b;
-    *b = t;
-}
 
 void QuickSortRecursive(int* arr, int startIndex, int endIndex)
 {
@@ -17,29 +9,36 @@ void QuickSortRecursive(int* arr, int startIndex, int endIndex)
     for (int i = startIndex; i < endIndex; i++)
         if (arr[i] <= pivot)
         {
-            swap(&arr[i], &arr[storeIndex]);
+            int t = arr[i];
+            arr[i] = arr[storeIndex];
+            arr[storeIndex] = t;
             storeIndex++;
         }
-    swap(&arr[storeIndex], &arr[endIndex]);
+    int temp = arr[storeIndex];
+    arr[storeIndex] = arr[endIndex];
+    arr[endIndex] = temp;
     if (storeIndex > startIndex) QuickSortRecursive(arr, startIndex, storeIndex - 1);
     if (storeIndex < endIndex) QuickSortRecursive(arr, storeIndex + 1, endIndex);
 }
 
 void QuickSortNotRecursive(int* arr, int startIndex, int endIndex)
 {
-    stack<int> stack;
+    int storage[2];
+    int* a = storage;
     int pivot, leftB, rightB;
     int pivotIndex = startIndex;
     int left = pivotIndex + 1;
     int right = endIndex;
-    stack.push(pivotIndex);
-    stack.push(right);
-    while (stack.size() > 0)
+
+    *a = pivotIndex;
+    a++;
+    *a = right;
+    while (a == &storage[0])
     {
-        rightB = stack.top();
-        stack.pop();
-        leftB = stack.top();
-        stack.pop();
+        rightB = *a;
+        a--;
+        leftB = *a;
+        a--;
 
         left = leftB + 1;
         pivotIndex = leftB;
@@ -53,19 +52,29 @@ void QuickSortNotRecursive(int* arr, int startIndex, int endIndex)
             while ((left <= right) && (arr[right] >= pivot))
                 right--;
             if (right >= left)
-                swap(arr[left], arr[right]);
+            {
+                int t = arr[left];
+                arr[left] = arr[right];
+                arr[right] = t;
+            }
         }
         if ((pivotIndex <= right) && (arr[pivotIndex] > arr[right]))
-            swap(arr[pivotIndex], arr[right]);
+        {
+            int temp = arr[pivotIndex];
+            arr[pivotIndex] = arr[right];
+            arr[right] = temp;
+        }
         if (leftB < right)
         {
-            stack.push(leftB);
-            stack.push(right - 1);
+            *a = leftB;
+            a++;
+            *a = right - 1;
         }
         if (rightB > right)
         {
-            stack.push(right + 1);
-            stack.push(rightB);
+            *a = right + 1;
+            a++;
+            *a = rightB;
         }
     }
 }
