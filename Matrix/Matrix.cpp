@@ -32,14 +32,15 @@ int main()
 
     cout << m3a << endl;
     cout << m3b << endl;
+    auto& ref = m2b;
 
-    m2a += m2b;
+    m2a += &m2b;
     cout <<"Matrix addition\n" << m2a << endl;
 
     m2a *= 3;
     cout << "Matrix multiplication\n" << m2a << endl;
 
-    m3a += m3b;
+    m3a += &m3b;
     cout << "Matrix addition\n" << m3a << endl;
 
     m3a *= 3;
