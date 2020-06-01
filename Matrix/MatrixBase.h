@@ -1,6 +1,9 @@
 #pragma once
 #include <fstream>
 
+constexpr unsigned int m2D_size = 2;
+constexpr unsigned int m3D_size = 3;
+
 class MatrixBase
 {
 public:
@@ -17,24 +20,4 @@ protected:
 
 private:
     const unsigned int m_size;
-};
-
-class Matrix2D :public MatrixBase
-{
-public:
-    Matrix2D() : MatrixBase(2) {};
-    virtual int element(unsigned int i, unsigned int j) const override;
-    virtual int& element(unsigned int i, unsigned int j) override;
-private:
-    int matrix[4]{ 0,0,0,0 };
-};
-
-class Matrix3D :public MatrixBase
-{
-public:
-    Matrix3D() : MatrixBase(3){}
-    virtual int element(unsigned int i, unsigned int j) const override;
-    virtual int& element(unsigned int i, unsigned int j) override;
-private:
-    int matrix[9]{ 0,0,0,0,0,0 };
 };

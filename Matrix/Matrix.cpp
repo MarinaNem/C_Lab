@@ -1,5 +1,6 @@
 ﻿#include <iostream>
-#include "MatrixBase.h"
+#include "Matrix2D.h"
+#include "Matrix3D.h"
 using namespace std;
 
 //RI-280002 Nemytova Marina
@@ -45,5 +46,4 @@ int main()
 
     m3a *= 3;
     cout << "Matrix multiplication\n" << m3a << endl;
-
 }

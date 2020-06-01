@@ -35,22 +35,3 @@ std::ostream& operator<<(std::ostream& stream, const MatrixBase& iMatrix)
 	return stream;
 }
 
-int Matrix2D::element(unsigned int i, unsigned int j) const
-{
-	return matrix[i + 2 * j];
-}
-
-int& Matrix2D::element(unsigned int i, unsigned int j)
-{
-	return matrix[i + 2 * j];
-}
-
-int Matrix3D::element(unsigned int i, unsigned int j) const
-{
-	return matrix[i + 3 * j];
-}
-
-int& Matrix3D::element(unsigned int i, unsigned int j)
-{
-	return matrix[i + 3 * j];
-}
